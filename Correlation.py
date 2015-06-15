@@ -39,23 +39,28 @@ coldens='/Users/willwaalkes/Desktop/CfA/dense-cores-taurus1/tau_1_HGBS_coldens_r
 Tdust_data_cube=pyfits.getdata(Tdust)
 Tdust_data_cube.shape
 
+coldens_data_cube=pyfits.getdata(coldens)
+coldens_data_cube.shape
+
 ##removing size 1 dimensions from the array
 colors=np.squeeze(Tdust_data_cube)
+colors2=np.squeeze(coldens_data_cube)
 
 ##array of 'x' values
 ##array of 'y' values
 colors.shape[0]
 colors.shape[1]
-
+colors2.shape[0]
+colors2.shape[1]
 #multipyling the values together, turning a 2-D array into a 1-D array
 colors_reshape=colors.reshape(colors.shape[0]*colors.shape[1])
-
+colors2_reshape=colors2.reshape(colors2.shape[0]*colors2.shape[1])
 molecules=[C3H2,CCH_1,CCH_2,CH3OH_A_96741,CH3OH_A_145103,CH3OH_E_96739,
            CH3OH_E_96745,CH3OH_E_145093,CH3OH_E_145097,H2CO_140839,H2CO_145603,
            H2CO_211211,N2Hp]
-mol_label=['C3H2','CCH_1','CCH_2','CH3OH_A_96741','CH3OH_A_145103','CH3OH_E_96739',
-           'CH3OH_E_96745','CH3OH_E_145093','CH3OH_E_145097','H2CO_140839','H2CO_145603',
-           'H2CO_211211','N2Hp']
+mol_label=['$C_3H_2$','$C_2H-1$','$C_2H-2$','$CH_3OH-A$ 96741 MHz','$CH_3OH-A$ 145103 MHz','$CH_3OH-E$ 96739 MHz',
+           '$CH_3OH-E$ 96745 MHz','$CH_3OH-E$ 145093 MHz','$CH_3OH-E$ 145097 MHz','$H_2CO$ 140839 MHz','$H_2CO$ 145603 MHz',
+           '$H_2CO$ 211211 MHz','$N_2H^+$']
            
 data_cube=[]
 data=[]
@@ -63,7 +68,7 @@ data_reshape=[]
 data_mask=[]
 
 #setting a condition for the mask:
-condition=np.where()
+#condition=np.where()
 for i in range(len(molecules)):
     data_cube.append(pyfits.getdata(molecules[i]))
     data.append(np.squeeze(data_cube[i]))
@@ -76,9 +81,9 @@ for i in range(len(data_reshape)):
         if (i != j): 
             molecule_1=data_reshape[i]
             molecule_2=data_reshape[j]
-            plt.scatter(molecule_1,molecule_2,s=1,marker='o',c=colors_reshape,edgecolor='none')
+            plt.scatter(molecule_1,molecule_2,s=1,marker='o',c=colors2_reshape,edgecolor='none')
             plt.xlabel(mol_label[i])
             plt.ylabel(mol_label[j])
             plt.title('Spatial Correlation')
-            plt.colorbar(label='K')
+            plt.colorbar(label='Column Density ($cm^{-2}$)')
             plt.show()
